@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[a4paper]{article}
 \usepackage[landscape]{geometry}
 \usepackage{url}
 \usepackage{multicol}
@@ -47,10 +47,22 @@
 \begin{tikzpicture}
 \node [mybox] (box){%
     \begin{minipage}{0.3\textwidth}
+        Euler Angles Fixed: XYZ - $(\psi, \Theta, \phi)$, Movable: ZYX$(\alpha, \beta, \gamma)$)
+        \textbf{Quaternions}
+        \begin{align*}
+            q &= [w, \textbf{v}]\\
+              &= [w, x\textbf{i} + y \textbf{j}, z \textbf{k}]\\
+              &= w, x\textbf{i} + y \textbf{j}, z \textbf{k}
+        \end{align*}
+        $q_a, q_b$
+        Addition:
+        $[w_a + w_b, (x_a+x_b) \textbf{i} (y_a+y_b) \textbf{j} (z_a+z_b) \textbf{k}]$
+        Mult:
+        $ = [w_aw_b]$
     \end{minipage}
 };
 %------------ Header ---------------------
-\node[fancytitle, right=10pt] at (box.north west) {Note};
+\node[fancytitle, right=10pt] at (box.north west) {Rotations};
 \end{tikzpicture}
 
 \end{multicols*}
