@@ -14,7 +14,16 @@
 \usepackage{mathtools}
 \usepackage{amsmath,amssymb}
 \usepackage{enumitem}
+\usepackage[pdftex]{graphicx}
 \makeatletter
+
+\newenvironment{tablehere}
+  {\def\@captype{table}}
+  {}
+
+\newenvironment{figurehere}
+  {\def\@captype{figure}}
+  {}
 
 \newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
 \newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
@@ -35,7 +44,7 @@
 %\colorbox[HTML]{e4e4e4}{\makebox[\textwidth-2\fboxsep][l]{texto}
 \begin{document}
 
-\begin{center}{{\textbf{RoVi Cheat Sheet}}}\\
+\begin{center}{{\textbf{RoVi Cheat Sheet (Robotics)}}}\\
 \end{center}
 \begin{multicols*}{3}
 
@@ -48,22 +57,75 @@
 \node [mybox] (box){%
     \begin{minipage}{0.3\textwidth}
         Euler Angles Fixed: XYZ - $(\psi, \Theta, \phi)$, Movable: ZYX$(\alpha, \beta, \gamma)$)
-        \textbf{Quaternions}
+        \\
+        \textbf{Quaternions:} 
         \begin{align*}
             q &= [w, \textbf{v}]\\
               &= [w, x\textbf{i} + y \textbf{j}, z \textbf{k}]\\
               &= w, x\textbf{i} + y \textbf{j}, z \textbf{k}
         \end{align*}
-        $q_a, q_b$
+        $q_a, q_b$ \\
         Addition:
-        $[w_a + w_b, (x_a+x_b) \textbf{i} (y_a+y_b) \textbf{j} (z_a+z_b) \textbf{k}]$
-        Mult:
-        $ = [w_aw_b]$
+        $[w_a + w_b, (x_a+x_b) \textbf{i} (y_a+y_b) \textbf{j} (z_a+z_b) \textbf{k}]$ \\
+        Mult: 
+        $ [w_a w_b - \textbf{v}_a \cdot \textbf{v}_b, w_a \textbf{v}_b + w_b \textbf{v}_a + \textbf{v}_a \times \textbf{v}_b  ]$        \textbf{Non-comm} 
+        Conjucation: $ [w, \textbf{v} ] \rightarrow [w, \textbf{-v} ] $, $qq^* = |q|^2$ (norm$^2$) \\
+        Inverse: $ q^{-1} = \frac{q^*}{|q|^2}$ Inverse of unit quat is conjucated 
     \end{minipage}
 };
 %------------ Header ---------------------
 \node[fancytitle, right=10pt] at (box.north west) {Rotations};
 \end{tikzpicture}
 
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \begin{figurehere}
+            \centering
+            \includegraphics[width=1\textwidth]{images/alg_2.png}
+        \end{figurehere}
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {Inverse Kinematics};
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        Interpolation: \\
+        $q_t = \frac{\sin(1-t)\theta}{\sin(\theta)} q_1 + \frac{\sin(t\theta)}{\sin(\theta)}q_2$\\
+        Angle between Quaternions: \\
+        $ \cos{\theta} = \frac{q_1 \cdot q_2}{|q_1||q_2|} = \frac{ w_1w_2+x_1x_2+y_1y_2+z_1z_2 }{ |q_1||q_2| } $\\
+        $ \theta = \cos^{-1}\left({\frac{ w_1w_2+x_1x_2+y_1y_2+z_1z_2 }{ |q_1||q_2| }\right) $
+
+        If the dot product is negative, the long way is chosen, negate one q to get shortest.
+
+
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {Quaternion interpolation};
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        
+        \begin{figurehere}
+            \centering
+            \includegraphics[width=0.8\textwidth]{images/rrt.png}
+        \end{figurehere}
+        \\
+        
+        \begin{figurehere}
+            \centering
+            \includegraphics[width=0.8\textwidth]{images/rrtconnect.png}
+        \end{figurehere}
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {RRT};
+\end{tikzpicture}
 \end{multicols*}
 \end{document}
