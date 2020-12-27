@@ -97,9 +97,14 @@
         $q_t = \frac{\sin(1-t)\theta}{\sin(\theta)} q_1 + \frac{\sin(t\theta)}{\sin(\theta)}q_2$\\
         Angle between Quaternions: \\
         $ \cos{\theta} = \frac{q_1 \cdot q_2}{|q_1||q_2|} = \frac{ w_1w_2+x_1x_2+y_1y_2+z_1z_2 }{ |q_1||q_2| } $\\
-        $ \theta = \cos^{-1}\left({\frac{ w_1w_2+x_1x_2+y_1y_2+z_1z_2 }{ |q_1||q_2| }\right) $
+        $ \theta = \cos^{-1}\left({\frac{ w_1w_2+x_1x_2+y_1y_2+z_1z_2 }{ |q_1||q_2| }\right) $ Note: Maybe half angle (*2)
 
         If the dot product is negative, the long way is chosen, negate one q to get shortest.
+
+        \textbf{MATLAB:} 
+        SLERP: \texttt{$q_0$ = slerp($q_1$,$q_2$,1/100)} \\
+        quat as vector: \texttt{q.compact}
+        
 
 
     \end{minipage}
@@ -127,5 +132,94 @@
 %------------ Header ---------------------
 \node[fancytitle, right=10pt] at (box.north west) {RRT};
 \end{tikzpicture}
+
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        
+        Positional: $ q_{min} \leq q + \Delta q \leq q_{max}  $ \\
+        Velocity: $ v_{min} \Delta t_i \leq \Delta q \leq v_{max}\Delta t_i $ , $ \Delta t_i = t_i+1-t_i $
+        Velocity (add q): $ v_{min} \Delta t_i+q \leq q+\Delta q \leq v_{max}\Delta t_i+q $ 
+        Acceleration: $ \Delta q = \frac{1}{2} a \Delta t_i [\Delta t_{i-1} + \Delta t_i] + \frac{\Deltat_i}{\Delta t_{i-1}} (q^i - q^{i-1}) $
+        \begin{align*}
+            Q_{min}(q^i.q^{i-1},t_i) &= max\{ q_{min}, v_{min}, \Delta t_i + q^i, \frac{1}{2} a_{min} \Delta t_i [\Delta t_{i-1} + \Delta t_i] + \frac{\Deltat_i}{\Delta t_{i-1}} (q^i - q^{i-1}) \} \\
+            Q_{max}(q^i.q^{i-1},t_i) &= min\{ q_{max}, v_{max}, \Delta t_i + q^i, \frac{1}{2} a_{max} \Delta t_i [\Delta t_{i-1} + \Delta t_i] + \frac{\Deltat_i}{\Delta t_{i-1}} (q^i - q^{i-1}) \} \\
+            Q_{min}(q^i.q^{i-1},t_i) &\leq q+\Delta q \leq Q_{max}(q^i.q^{i-1},t_i)
+        \end{align*}
+        
+        
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {Joint Limits};
+\end{tikzpicture}
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        tst
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {Placeholder};
+\end{tikzpicture}
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+
+        MATLAB: \texttt{Polyfit(X,Y,N)}: Fit a N degree Polynomial
+        MATLAB: \texttt{polyval(p,x)}: Evaluate Polynomial on x
+        SPLINE: \begin{verbatim}
+tq = 0:0.1:5;
+slope0 = 0;
+slopeF = 0;
+xq = spline(t,[slope0; x; slopeF],tq);
+yq = spline(t,[slope0; y; slopeF],tq);
+        \end{verbatim}
+
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {Polynomial Interpolation};
+\end{tikzpicture}
 \end{multicols*}
+
+\newpage
+
+
+\begin{center}{{\textbf{RoVi Cheat Sheet (Vision)}}}\\
+\end{center}
+\begin{multicols*}{3}
+
+\tikzstyle{mybox} = [draw=black, fill=white, very thick,
+    rectangle, rounded corners, inner sep=10pt, inner ysep=10pt]
+\tikzstyle{fancytitle} =[fill=black, text=white, font=\bfseries]
+
+%------------ Note ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        \begin{itemize}
+            \item Calibration
+            \item epipole 
+            \item Plucker linjer
+            \item Fundamental matrix
+        \end{itemize}
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {TODO};
+\end{tikzpicture}
+
+%------------ Note ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        Point on line: dot product is zero
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {Projective space};
+\end{tikzpicture}
+\end{multicols*}
+
 \end{document}
