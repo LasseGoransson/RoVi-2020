@@ -203,6 +203,9 @@ yq = spline(t,[slope0; y; slopeF],tq);
             \item epipole 
             \item Plucker linjer
             \item Fundamental matrix
+            \item Disparity 
+            \item Reflectance function
+            \item Disparity Gradient assumption
         \end{itemize}
     \end{minipage}
 };
@@ -219,6 +222,36 @@ yq = spline(t,[slope0; y; slopeF],tq);
 };
 %------------ Header ---------------------
 \node[fancytitle, right=10pt] at (box.north west) {Projective space};
+\end{tikzpicture}
+%------------ Note ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        Z from Disparity map:
+        \begin{align*}
+        z  = f \frac{B}{dx}
+        \end{align*}
+XYZ from xyd
+\begin{align*}
+Q = \begin{bmatrix}
+    1 & 0 & 0 & -c_l_x \\
+    0 & 1 & 0 & -c_l_y \\
+    0 & 0 & 0 & f \\
+    0 & 0 & \frac{-1}{B} & \frac{l_x - r_x}{B}
+\end{bmatrix}
+\end{align*}
+
+
+        
+        Block sum of squared dist:
+        \begin{align*}
+             E(x,y;d) = \sum^{}_{(x',y') \in N(x,y)} [ I_L(x'+d,y') - I_R(x',y') ]^2   
+        \end{align*}
+        
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {Dense Stereo};
 \end{tikzpicture}
 \end{multicols*}
 
