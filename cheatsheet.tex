@@ -212,6 +212,41 @@ yq = spline(t,[slope0; y; slopeF],tq);
 %------------ Header ---------------------
 \node[fancytitle, right=10pt] at (box.north west) {TODO};
 \end{tikzpicture}
+%------------ Note ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        m = KAH\cdot M \\
+        \begin{bmatrix}
+            u \\
+            v \\
+            w 
+        \end{bmatrix}=
+        \begin{bmatrix}
+            \alpha_u & s & u_0\\
+            0 & \alpha_v & v_0 \\
+            0 & 0 & 1
+        \end{bmatrix}  
+        \begin{bmatrix}
+            f & 0 & 0 & 0 \\
+            0 & f & 0 & 0 \\
+            0 & 0 & 1 & 0
+        \end{bmatrix} 
+        \begin{bmatrix}
+            \textbf{R} & \textbf{t} \\
+            0 & 0 & 0 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+            X \\
+            Y \\
+            Z \\
+            1
+        \end{bmatrix}
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {General};
+\end{tikzpicture}
 
 %------------ Note ---------------
 \begin{tikzpicture}
@@ -233,12 +268,27 @@ yq = spline(t,[slope0; y; slopeF],tq);
         \end{align*}
 XYZ from xyd
 \begin{align*}
+
+\begin{bmatrix}
+    X \\
+    Y \\
+    Z \\
+    1
+\end{bmatrix} = Q \cdot 
+\begin{bmatrix}
+   x \\
+   y \\
+   d \\
+   1
+\end{bmatrix}
+,
 Q = \begin{bmatrix}
     1 & 0 & 0 & -c_l_x \\
     0 & 1 & 0 & -c_l_y \\
     0 & 0 & 0 & f \\
     0 & 0 & \frac{-1}{B} & \frac{l_x - r_x}{B}
 \end{bmatrix}
+
 \end{align*}
 
 
@@ -253,6 +303,129 @@ Q = \begin{bmatrix}
 %------------ Header ---------------------
 \node[fancytitle, right=10pt] at (box.north west) {Dense Stereo};
 \end{tikzpicture}
+
+
+%------------ Note ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}       
+        H $\rightarrow$ 3x3, 8DOF, multiply by nonzero k gives same equations. $\rightarrow$ 4 2D point pairs.
+    $$p_1 \approx KP, p_2 \approx KRP$$
+    Rotation: $$p_2 \approx KRK^{-1}p_1$$
+    Where $K = KA$
+\end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {Homography};
+\end{tikzpicture}
+
+%------------ Note ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}       
+     Surface Normal Estimation.
+     Points in neighbourhood.
+     1. Mean
+     2. Covariance
+     3. Eigenvectors $\rightarrow$ vector with smallest eigenvalue is surface normal. \\
+
+     KABSCH Algorithm:\\
+     Centroids $c_p = E[p]$ , $c_q = E[q]$\\
+     Demean pointsets $p' = p - c_p$ , $q' = q - c_q$ \\
+     Compute Covariance $C_{pq} = p'q'^T$ \\
+     SVD $C_{pq} = USV^T$ \\
+     $R = VS'U^T$ , $S' = \begin{bmatrix}
+         1 & 0 & 0 \\
+         0 & 1 & 0 \\
+         0 & 0 & sign(det(VU^T))
+     \end{bmatrix}$ \\
+     $t = c_q-Rc_p$ \\
+     To rectify $P \rightarrow Q, rec = RP + t$ \\
+
+     ICP: \\
+     For all opject points $(p)$ find nearest scene point $(q)$.\\
+     Use point pairs $(p,q)$ to estimate $T$ using KABSCH. \\
+     Apply T to $(p)$\\
+     repeat till alignment error becomes low\\
+     $E[(p-q)^T(p-q)] < \epsilon$\\
+     or when overlap becomes high $#( (p-q)^T(p-q) < \epsilon) > count$ \\
+
+     Shape features:\\
+     Spin Images \\
+     FPFH \\
+     SHOT\\
+
+\end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {Point clouds};
+
+\end{tikzpicture}
+%------------ Note ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        Nothing
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {2D $\rightarrow$ 3D poseestimation};
+\end{tikzpicture}
+
+%------------ Note ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        $H_W^C = KA\cdot (r_1 r_2 t)$ , $T_W^C = \begin{bmatrix}
+            R & t \\
+            0 & 1
+        \end{bmatrix}$ , $R = \begin{bmatrix}
+            r1 & r2 & r3
+        \end{bmatrix}$
+        We know rotation columns have length one, scale by $\lambda$ to achieve this.
+        $
+        \begin{bmatrix}
+            r1 & r2 & t
+        \end{bmatrix} = A^{-1}K^{-1}H = \lambda M
+        $
+        $
+        r_3 = \pm(r_1\times r_2)
+        $ , $det(R) = 1$ \\
+        Gives transform from camera to object, take inverse. \\
+        Better approx.\\
+        $\bar{M}$ First two columns of M, SVD decompose $\bar{M}$. \\
+        $\bar{R} = UV^T$ ; $\lambda = \frac{trace(\bar{R}^T\bar{M})}{trace(\bar{M}^T\bar{M})} $\\
+        find $r_3$ like before. \\
+        
+        Iterative Method:
+        $x_i = h(T;X_i,K) + \eta; \eta \sim N(0,\Sigma)$\\
+        $x_i = KA[Rt]X_i + \eta$ \\ 
+        Minimize Error over all correspondences.\\
+        $T_O^C = \underset{T}{argmin}\underset{i}{\sum} ||h_i(T)-x_i||^2$
+
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {2D $\rightarrow$ 3D poseestimation};
+\end{tikzpicture}
+
+%------------ Note ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        Predict: \\
+        $x_t^- = D_tx_{t-1}^+$ \\
+        $\Sigma_t^- = D_t\Sigma_{t-1}^+D_t^T+\Sigma_{d_t}$ \\
+        Correct: \\
+        $K_t = \Sigma_t^-M_t^T(M_t\Sigma_t^-M_t^T + \Sigma_{m_t})^{-1}$ \\
+        $x_t^+ = x_t^- + K_t(y_t-M_tx_t^-)$ \\
+        $\Sigma_t^+ = (I-K_tM_t)\Sigma_t^-$
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {Kalman Filter};
+\end{tikzpicture}
+
 \end{multicols*}
 
 \end{document}
