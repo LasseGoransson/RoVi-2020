@@ -59,11 +59,10 @@
         Euler Angles Fixed: XYZ - $(\psi, \Theta, \phi)$, Movable: ZYX$(\alpha, \beta, \gamma)$)
         \\
         \textbf{Quaternions:} 
-        \begin{align*}
-            q &= [w, \textbf{v}]\\
-              &= [w, x\textbf{i} + y \textbf{j}, z \textbf{k}]\\
-              &= w, x\textbf{i} + y \textbf{j}, z \textbf{k}
-        \end{align*}
+        $
+            q = [w, \textbf{v}]
+              = [w, x\textbf{i}, y \textbf{j}, z \textbf{k}]
+        $ \\
         $q_a, q_b$ \\
         Addition:
         $[w_a + w_b, (x_a+x_b) \textbf{i} (y_a+y_b) \textbf{j} (z_a+z_b) \textbf{k}]$ \\
@@ -113,6 +112,30 @@
 \node[fancytitle, right=10pt] at (box.north west) {Quaternion interpolation};
 \end{tikzpicture}
 
+%------------ Note ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+$[dp_ {base}^{tool}]_{desired} = [p_{base}^{tool}}]_{desired} -p_{base}^{tool}}(q) $\\
+
+$k=[R_{base}^{tool}]_{desired}[R_{base}^{tool}](q)^T]$
+$[dw_{base}^{tool}]_{desired} = \frac{1}{2} \begin{bmatrix}
+    k_{32} - k_{23} \\
+    k_{13} - k_{31} \\
+    k_{21} - k_{12} \\
+\end{bmatrix} $ $\zeta_i \rightarrow 1 = revolute, 0 = prismatic$\\
+$[A(q)]_{ji} =
+\{\zeta_i[z_{base}^i(q)]\times[p_{base}^{tool}(q)-p_{base}^{i}}(q)]+(1-\zeta_i)z_{base}^i(q) \}_j$
+[B(q)]_{ji} = \{\zeta_iz_{base}^i(q)\}_j
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {IK};
+\end{tikzpicture}
+
+
+
+
 \begin{tikzpicture}
 \node [mybox] (box){%
     \begin{minipage}{0.3\textwidth}
@@ -141,12 +164,21 @@
         Velocity: $ v_{min} \Delta t_i \leq \Delta q \leq v_{max}\Delta t_i $ , $ \Delta t_i = t_i+1-t_i $
         Velocity (add q): $ v_{min} \Delta t_i+q \leq q+\Delta q \leq v_{max}\Delta t_i+q $ 
         Acceleration: $ \Delta q = \frac{1}{2} a \Delta t_i [\Delta t_{i-1} + \Delta t_i] + \frac{\Deltat_i}{\Delta t_{i-1}} (q^i - q^{i-1}) $
+        \vspace{-0.7cm}
         \begin{align*}
             Q_{min}(q^i.q^{i-1},t_i) &= max\{ q_{min}, v_{min}, \Delta t_i + q^i, \frac{1}{2} a_{min} \Delta t_i [\Delta t_{i-1} + \Delta t_i] + \frac{\Deltat_i}{\Delta t_{i-1}} (q^i - q^{i-1}) \} \\
             Q_{max}(q^i.q^{i-1},t_i) &= min\{ q_{max}, v_{max}, \Delta t_i + q^i, \frac{1}{2} a_{max} \Delta t_i [\Delta t_{i-1} + \Delta t_i] + \frac{\Deltat_i}{\Delta t_{i-1}} (q^i - q^{i-1}) \} \\
             Q_{min}(q^i.q^{i-1},t_i) &\leq q+\Delta q \leq Q_{max}(q^i.q^{i-1},t_i)
         \end{align*}
-        
+        \vspace{-1cm}
+        \begin{align*}
+        \text{
+        Pros: Time critical trajcetories(visual servoing), good handling of positional limits,}
+        \\
+        \text{
+        feasible solution closest to desired movement. 
+    Cons: Complicated to program, path may deviate from desired. }
+    \end{align*}
         
     \end{minipage}
 };
@@ -156,11 +188,13 @@
 \begin{tikzpicture}
 \node [mybox] (box){%
     \begin{minipage}{0.3\textwidth}
-        tst
+        $X(s(t)) = X_{i-1} + (X_i - X_{i-1})s(t)$ , $0 \leq s \leq 1 $ \\ 
+
+        $s(t) = \frac{t-t_{i-1}}{t_{i}-t_{i-1}}, \left(\frac{t-t_{i-1}}{t_{i}-t_{i-1}}\right)^2, 1-\left(\frac{t-t_{i-1}}{t_{i}-t_{i-1}}\right)^2 $
     \end{minipage}
 };
 %------------ Header ---------------------
-\node[fancytitle, right=10pt] at (box.north west) {Placeholder};
+\node[fancytitle, right=10pt] at (box.north west) {Linear Interpolation};
 \end{tikzpicture}
 \begin{tikzpicture}
 \node [mybox] (box){%
@@ -181,6 +215,20 @@ yq = spline(t,[slope0; y; slopeF],tq);
 %------------ Header ---------------------
 \node[fancytitle, right=10pt] at (box.north west) {Polynomial Interpolation};
 \end{tikzpicture}
+
+
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+        ctraj in matlab for trajectory.
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {Trajectory planning};
+\end{tikzpicture}
+
+
+
 \end{multicols*}
 
 \newpage
@@ -199,12 +247,6 @@ yq = spline(t,[slope0; y; slopeF],tq);
 \node [mybox] (box){%
     \begin{minipage}{0.3\textwidth}
         \begin{itemize}
-            \item Calibration
-            \item epipole 
-            \item Plucker linjer
-            \item Fundamental matrix
-            \item Disparity 
-            \item Reflectance function
             \item Disparity Gradient assumption
         \end{itemize}
     \end{minipage}
@@ -365,11 +407,16 @@ Q = \begin{bmatrix}
 \begin{tikzpicture}
 \node [mybox] (box){%
     \begin{minipage}{0.3\textwidth}
-        Nothing
+        $e_2 = P_2C_1$ , $m_{2,\infty} = P_2M_{1,\infty}$ \\
+        Epipolar Line $l = e2 \times m_{2,\infty}$ or $l = F_{12}\cdot m_1$\\
+        Fundametal Matrix $m_2^TF_{12}m_1 = 0$ , $F_{12} = [e_2]_\times \cdot P_2 \cdot P_1^+ $ \\
+        Estimate Fundamental Matrix, 7DOF
+
+
     \end{minipage}
 };
 %------------ Header ---------------------
-\node[fancytitle, right=10pt] at (box.north west) {2D $\rightarrow$ 3D poseestimation};
+\node[fancytitle, right=10pt] at (box.north west) {Epipolar 2};
 \end{tikzpicture}
 
 %------------ Note ---------------
@@ -425,6 +472,48 @@ Q = \begin{bmatrix}
 %------------ Header ---------------------
 \node[fancytitle, right=10pt] at (box.north west) {Kalman Filter};
 \end{tikzpicture}
+
+%------------ Note ---------------
+\begin{tikzpicture}
+\node [mybox] (box){%
+    \begin{minipage}{0.3\textwidth}
+         $P = KA\cdot \begin{bmatrix}
+             R & t\\
+             0 &1
+         \end{bmatrix}  = (\textbf{P} \textbf{p} )$\\ 
+     $\textbf{C} = - \textbf{R}^{-1}\cdot \textbf{t} = - \textbf{P}^{-1} \textbf{p}$ Optical Center\\
+     $M_\infty = \begin{bmatrix}
+         \textbf{P}^{-1} m \\
+         0
+     \end{bmatrix} = 
+     \begin{bmatrix}
+         \textbf{M}_\infty \\
+         0
+     \end{bmatrix}$ \\
+     Plücker lines:\\
+     $\vec{\mu} = \vec{m} \times \vec{{v}}$ , $L \equiv ( \vec{{v}} ; \vec{{\mu}}
+ )$  \\
+ $L = \frac{1}{|| \textbf{M}_\infty||} ( \textbf{M}_\infty ; \textbf{C} \times \textbf{M}_\infty    )$ , Line from C to $M_\infty$
+      
+ Point reconstruction : \\ $M_1 = \frac{v_1(v_2\times\mu_2) - (v_1v_2)v_1(v_2 \times \mu_1)}{|| v_1 \times v_2 ||^2} v_1 + v_1 \times \mu_1$ , Find M2 and take middle point. \\
+    $P = \begin{bmatrix}
+        Q_1^T & q_{14} \\
+        Q_2^T & q_{24} \\
+        Q_3^T & q_{34} 
+    \end{bmatrix} $ , $ \begin{bmatrix}
+        Q_1^T - uQ_3^T \\
+        Q_2^T - vQ_3^T 
+    \end{bmatrix} \cdot \textbf{M} = \begin{bmatrix}
+    uq_{34} - q_{14} \\
+    vq_{34} - q_{24} \\
+    \end{bmatrix} $ \\
+    $ \textbf{M} = (A^TA)^{-1}A^Tb  $ 
+    \end{minipage}
+};
+%------------ Header ---------------------
+\node[fancytitle, right=10pt] at (box.north west) {Epipolar Geometri};
+\end{tikzpicture}
+
 
 \end{multicols*}
 
